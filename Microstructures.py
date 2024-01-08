@@ -15,3 +15,11 @@ from keras.utils import normalize, to_categorical
 from keras import layers
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
+
+plt.style.use('classic')
+
+# Initializations
+
+data_dir = "C:/Users/hahas/Downloads/Capstone Microstructure Data/"
+SIZE = 200
+batch_size = 15
