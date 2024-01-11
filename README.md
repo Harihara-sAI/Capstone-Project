@@ -3,3 +3,8 @@
 
  
  Zongrui Pei, Kyle A. Rozman, mer N. Doan, Youhai Wen, Nan Gao, Elzabeth A. Holm, Jeffery A. Hawk, David E. Alman, Michael C. Gao, Machine-Learning Microstructure for Inverse Material Design, Advanced Science, Vol 8, Issue 23, 2021, https://doi.org/10.1002/advs.202101207, DOI: 10.18141/1843846
+
+Modifications made:
+1. Cropped and resized each image to be 400x400 pixels.
+2. All images were flipped 90 degrees to the right and left and saved as new images.
+3. Each images' horizontal and vertical reflections were also saved as new images.
