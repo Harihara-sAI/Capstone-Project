@@ -118,3 +118,5 @@ plt.plot(epochs_range,loss, label='Training Loss')
 plt.plot(epochs_range,val_loss, label='Validation Loss')
 plt.legend(loc='upper right')
 plt.title('Training and Validation Loss')
+
+model.save("model.h5")
