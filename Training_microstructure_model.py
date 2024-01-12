@@ -24,8 +24,8 @@ plt.style.use('classic')
 # Initializations
 
 data_dir = "C:/Users/hahas/Downloads/Capstone Microstructure Data/"
-SIZE = 200
-batch_size = 32
+SIZE = 100
+batch_size = 16
 num_classes=3
 
 # Modifying images for easier working and labelling properly 

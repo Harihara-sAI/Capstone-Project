@@ -8,3 +8,11 @@
 Modifications made:
 1. Cropped and resized each image to be 400x400 pixels.2. All images were flipped 90 degrees to the right and left and saved as new images.
 3. Each images' horizontal and vertical reflections were also saved as new images.
+
+
+Current results:
+
+epochs trained is 100
+training loss: 0.1393 - training accuracy: 0.9350 - val_loss: 0.2822 - val_accuracy: 0.9118
+
+![Alt text](image.png)
