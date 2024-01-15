@@ -16,3 +16,11 @@ epochs trained is 100
 training loss: 0.1393 - training accuracy: 0.9350 - val_loss: 0.2822 - val_accuracy: 0.9118
 
 ![Alt text](image.png)
+
+
+Next training results:
+
+epochs trained is 200
+training loss: 8.1438e-05 - training accuracy: 1.0000 - val_loss: 0.6634 - val_accuracy: 0.9486
+
+![Alt text](image-1.png)
