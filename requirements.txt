@@ -1,7 +1,7 @@
 keras
 matplotlib
 numpy
-opencv_contrib_python
+opencv_python
 Pillow
 scikit_learn
 streamlit
