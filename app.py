@@ -42,9 +42,7 @@ else:
     st.image(image, use_column_width=True)
     predictions = import_and_predict(image, model)
     score = tf.nn.softmax(predictions[0])
-    st.write(predictions)
-    st.write(score)
     st.write(
     "This image most likely belongs to {} ."
-    .format(class_names[np.argmax(score)], 100 * np.max(score))
+    .format(class_names[np.argmax(score)])
 )
