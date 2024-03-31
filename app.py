@@ -4,7 +4,7 @@ import streamlit as st
 
 class_names = ['Dead Mild Steel', 'Tool Steel', 'Low Carbon Steel', 'Hardened Steel', 'Tempered Steel']
 
-@st.cache(allow_output_mutation=True)
+@st.cache_data()
 def load_model():
   model=tf.keras.models.load_model('my_model2.hdf5')
   return model
