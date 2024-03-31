@@ -45,6 +45,6 @@ else:
     st.write(predictions)
     st.write(score)
     st.write(
-    "This image most likely belongs to {} with a {:.2f} percent confidence."
+    "This image most likely belongs to {} ."
     .format(class_names[np.argmax(score)], 100 * np.max(score))
 )
