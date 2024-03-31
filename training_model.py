@@ -1,88 +1,54 @@
 #%%
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
 
-plt.style.use('classic')
-from keras.preprocessing.image import ImageDataGenerator
-from keras.models import Sequential
-from keras.layers import Conv2D, MaxPooling2D, BatchNormalization
-from keras.layers import Activation, Dropout, Flatten, Dense
-from keras.utils import normalize, to_categorical
-import os
-import cv2
-from keras import layers
-from PIL import Image
+import matplotlib.pyplot as plt
 import numpy as np
-from keras.utils import to_categorical
-from keras.layers import Dense,Conv2D,Flatten,MaxPool2D,Dropout
-from keras.models import Sequential
+import os
+import PIL
 import tensorflow as tf
 
-#%%
-image_directory = 'C:/20BME0147/Capstone Data/'
-SIZE = 200
-dataset = []
-label = []
-dead_mild_steel = os.listdir(image_directory + '1 - Dead Mild Steel/')
-for i, image_name in enumerate(dead_mild_steel):
-    if (image_name.split('.')[1] == 'jpg'):
-        image = cv2.imread(image_directory + '1 - Dead Mild Steel/' + image_name)
-        image = Image.fromarray(image, 'RGB')
-        image = image.resize((SIZE, SIZE))
-        dataset.append(np.array(image))
-        label.append("Dead Mild Steel")
-
-low_carbon_steel = os.listdir(image_directory + '2 - Low Carbon Steel/')
-for i, image_name in enumerate(low_carbon_steel):
-      if (image_name.split('.')[1] == 'jpg'):
-        image = cv2.imread(image_directory + '2 - Low Carbon Steel/' + image_name)
-        image = Image.fromarray(image, 'RGB')
-        image = image.resize((SIZE, SIZE))
-        dataset.append(np.array(image))
-        label.append("Low Carbon Steel")
-
-hardened_steel = os.listdir(image_directory + '7 - Hardened Steel/')
-for i, image_name in enumerate(hardened_steel):
-    if (image_name.split('.')[1] == 'jpg'):
-        image = cv2.imread(image_directory + '7 - Hardened Steel/' + image_name)
-        image = Image.fromarray(image, 'RGB')
-        image = image.resize((SIZE, SIZE))
-        dataset.append(np.array(image))
-        label.append("Hardened Steel")
-
-tempered_steel = os.listdir(image_directory + '8 - Tempered Steel/')
-for i, image_name in enumerate(hardened_steel):
-    if (image_name.split('.')[1] == 'jpg'):
-        image = cv2.imread(image_directory + '8 - Tempered Steel/' + image_name)
-        image = Image.fromarray(image, 'RGB')
-        image = image.resize((SIZE, SIZE))
-        dataset.append(np.array(image))
-        label.append("Tempered Steel")
-
-tool_steel = os.listdir(image_directory + '10 - Tool Steel/')
-for i, image_name in enumerate(hardened_steel):
-    if (image_name.split('.')[1] == 'jpg'):
-        image = cv2.imread(image_directory + '10 - Tool Steel/' + image_name)
-        image = Image.fromarray(image, 'RGB')
-        image = image.resize((SIZE, SIZE))
-        dataset.append(np.array(image))
-        label.append("Tool Steel")
-
+from tensorflow import keras
+from keras import layers
+from keras.models import Sequential
 
 #%%
-dataset = np.array(dataset)
-label = np.array(label)
+data_dir = 'C:/20BME0147/Capstone Data/'
+img_height,img_width=180,180
+batch_size=32
+train_ds = tf.keras.preprocessing.image_dataset_from_directory(
+  data_dir,
+  validation_split=0.2,
+  subset="training",
+  seed=123,
+  image_size=(img_height, img_width),
+  batch_size=batch_size)
 
-from sklearn.model_selection import train_test_split
+val_ds = tf.keras.preprocessing.image_dataset_from_directory(
+  data_dir,
+  validation_split=0.2,
+  subset="validation",
+  seed=123,
+  image_size=(img_height, img_width),
+  batch_size=batch_size)
+#%%
+class_names = train_ds.class_names
+print(class_names)
 
+#%%
+import matplotlib.pyplot as plt
 
-X_train, X_test, y_train, y_test = train_test_split(dataset, label, test_size = 0.20, random_state = 0)
+plt.figure(figsize=(10, 10))
+for images, labels in train_ds.take(1):
+  for i in range(9):
+    ax = plt.subplot(3, 3, i + 1)
+    plt.imshow(images[i].numpy().astype("uint8"))
+    plt.title(class_names[labels[i]])
+    plt.axis("off")
 
 #%%
 num_classes = 5
 
 model = Sequential([
-  layers.experimental.preprocessing.Rescaling(1./255, input_shape=(SIZE,SIZE, 3)),
+  layers.experimental.preprocessing.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
   layers.Conv2D(16, 3, padding='same', activation='relu'),
   layers.MaxPooling2D(),
   layers.Conv2D(32, 3, padding='same', activation='relu'),
@@ -91,41 +57,21 @@ model = Sequential([
   layers.MaxPooling2D(),
   layers.Flatten(),
   layers.Dense(128, activation='relu'),
-  layers.Dense(num_classes)
+  layers.Dense(num_classes,activation='softmax')
 ])
+     
 
-
+#%%
 model.compile(optimizer='adam',
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['accuracy'])
 
 #%%
-model.summary()
-epochs=100
+epochs=30
 history = model.fit(
-  X_train,y_train,
-  validation_data=(X_test,y_test),
+  train_ds,
+  validation_data=val_ds,
   epochs=epochs
 )
-acc = history.history['accuracy']
-val_acc = history.history['val_accuracy']
 
-loss = history.history['loss']
-val_loss = history.history['val_loss']
-
-epochs_range = range(epochs)
-
-#%%
-plt.figure(figsize=(15, 8))
-plt.subplot(1, 2, 1)
-plt.plot(epochs_range,acc, label='Training Accuracy')
-plt.plot(epochs_range,val_acc, label='Validation Accuracy')
-plt.legend(loc='lower right')
-plt.title('Training and Validation Accuracy')
-
-plt.subplot(1, 2, 2)
-plt.plot(epochs_range,loss, label='Training Loss')
-plt.plot(epochs_range,val_loss, label='Validation Loss')
-plt.legend(loc='upper right')
-plt.title('Training and Validation Loss')
-plt.show()
+tf.keras.models.save_model(model,'my_model2.hdf5')
